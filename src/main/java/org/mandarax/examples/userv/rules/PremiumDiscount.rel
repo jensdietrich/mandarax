@@ -1,0 +1,22 @@
+package org.mandarax.examples.userv.rules.generated;
+
+import org.mandarax.examples.userv.domain.*;
+
+@category="Auto Discounts Rule Set"
+@author="Jens Dietrich"
+@lastupdated="19/11/10"
+rel PremiumDiscount(Car car,int discount) queries getDiscount(car),hasDiscount(car,discount) {
+	
+	@description="If the car only has Driver airbags then lower the premium by 12%"
+	AD_01: car.hasAirbags & !car.hasFrontPassengerAirbag & !car.hasSidePanelAirbags -> PremiumDiscount(car,12);
+
+	@description="If the car has Driver and Passenger airbags then lower the premium by 15%"
+	AD_02: car.hasAirbags & car.hasFrontPassengerAirbag & !car.hasSidePanelAirbags -> PremiumDiscount(car,15);
+
+	@description="If the car has Driver, Passenger and Side airbags then lower the premium by 18%"
+	AD_03:car.hasAirbags & car.hasFrontPassengerAirbag & car.hasSidePanelAirbags -> PremiumDiscount(car,18);
+
+	@description="If the car's potential theft rating is high and the car is equipped with an alarm system, then lower the premium by 10%"
+	AD_04:PotentialTheftRating(car,"high") & car.hasAlarm -> PremiumDiscount(car,10);
+}
+

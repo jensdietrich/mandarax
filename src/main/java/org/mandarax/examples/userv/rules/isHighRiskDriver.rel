@@ -1,0 +1,18 @@
+package org.mandarax.examples.userv.rules.generated;
+
+import org.mandarax.examples.userv.domain.*;
+ 
+@category="Driver Eligibility Rule Set"
+@author="Jens Dietrich"
+@lastupdated="19/11/10"
+rel IsHighRiskDriver(Driver driver) queries isHighRiskDriver(driver) {
+	
+	@description="If the driver has been convicted of a DUI, then the driver qualifies as a High Risk Driver"
+	DE_DRC01: driver.hasBeenConvictedOfaDUI -> IsHighRiskDriver(driver);
+	
+	@description="If the number of accidents the applicant has been involved in is greater than 2, then the driver is a High Risk Driver"
+	DE_DRC02: driver.numberOfAccidentsInvolvedIn>2 -> IsHighRiskDriver(driver);
+	
+	@description="If the driver has had more that 3 moving violations in the last two years, then the driver is a High Risk Driver"
+	DE_DRC03: driver.numberOfMovingViolationsInLastTwoYears>3 -> IsHighRiskDriver(driver);
+}

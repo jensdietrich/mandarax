@@ -1,0 +1,21 @@
+	static @{aggregationType} @{aggregationFunction} (ResourceIterator<@{aggregationRel}> _rel) {
+		@{aggregationType} _v = @{aggregationNull} ;
+		boolean f = true;
+		while (_rel.hasNext()) {
+		    @{aggregationRel} _c = _rel.next();
+		    if (f) {
+		    	@if{isNumericAggtype}_v = _c.@{aggregationAttribute};
+		    	@else{} _v = _c.@{aggregationAttribute};
+		    	@end{}
+		    	f = false;
+		    }
+		    else {
+				@if{isNumericAggtype}if (_c.@{aggregationAttribute} > _v) {_v = _c.@{aggregationAttribute};}
+				@else{} if (_c.@{aggregationAttribute}.compareTo(_v)>0) {_v = _c.@{aggregationAttribute};}
+				@end{}
+			}
+		}
+		_rel.close();
+		return _v;
+	}
+	

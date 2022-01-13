@@ -1,0 +1,21 @@
+package org.mandarax.examples.userv.rules.generated;
+
+import org.mandarax.examples.userv.domain.*;
+ 
+@category="Auto Eligibility Rule Set"
+@author="Jens Dietrich"
+@lastupdated="19/11/10"
+rel AutoEligibility(Car car,String eligibility) queries getRating(car),hasRating(car,eligibility) {
+	
+	@description="If the Potential Occupant Injury Rating is extremely high, then the auto eligibility is 'not eligible'"
+	AE_01: PotentialOccupantInjuryRating(car,"extremely high") -> AutoEligibility(car,"not eligible");
+
+	@description="If the Potential Occupant Injury Rating is high, then the auto eligibility is 'provisional'"
+	AE_02: PotentialOccupantInjuryRating(car,"high") -> AutoEligibility(car,"provisional");
+
+	@description="If the Potential Theft Rating is high, then the auto eligibility is 'provisional'"
+	AE_03: PotentialTheftRating(car,"high") -> AutoEligibility(car,"provisional");
+
+	@description="If none of the following is true, then the auto eligibility is 'eligible': Auto eligibility is 'not eligible',Auto eligibility is 'provisional'"
+	AE_04: -> AutoEligibility(car,"eligible");
+}

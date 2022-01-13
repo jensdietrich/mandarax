@@ -1,0 +1,18 @@
+package org.mandarax.examples.userv.rules.generated;
+
+import org.mandarax.examples.userv.domain.*;
+ 
+@category="Driver Eligibility Rule Set"
+@author="Jens Dietrich"
+@lastupdated="19/11/10"
+rel IsEligible(Driver driver) queries isEligible(driver) {
+	
+	@description="If young driver and driver has training certification, then eligible driver"
+	DE_DAC03: DriverCategory(driver,"young driver") & HasTrainingCertification(driver) -> IsEligible(driver);
+
+	@description="If senior driver and driver has training certification, then eligible driver"
+	DE_DAC05: DriverCategory(driver,"senior driver") & HasTrainingCertification(driver) -> IsEligible(driver);
+
+	@description="If the following are not true, then eligible driver: Young driver, Senior driver"
+	DE_DAC06: !DriverCategory(driver,"senior driver") & !DriverCategory(driver,"young driver") -> IsEligible(driver);
+}

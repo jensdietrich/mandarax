@@ -1,0 +1,10 @@
+	static int @{aggregationFunction} (ResourceIterator<@{aggregationRel}> _rel) {
+		int _v = 0 ;
+		
+		while (_rel.hasNext()) {
+			_rel.next();
+			_v = _v+1;
+		}
+		_rel.close();
+		return _v;
+	}

@@ -1,0 +1,12 @@
+	static @{aggregationType} @{aggregationFunction} (ResourceIterator<@{aggregationRel}> _rel) {
+		@{aggregationType} _v = @{aggregationNull} ;
+		
+		while (_rel.hasNext()) {
+			_v = _v + _rel.next().@{aggregationAttribute};
+		}
+		_rel.close();
+		return _v;
+	}
+	
+	
+	

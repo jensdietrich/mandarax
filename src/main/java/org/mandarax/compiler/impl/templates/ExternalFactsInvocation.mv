@@ -1,0 +1,25 @@
+	@code{xtype=rule.getIterable().getType();java.lang.reflect.Method method = org.mandarax.compiler.impl.CompilerUtils.findQueryMethod(query,xtype,resolver);}
+	@if{method==null}
+	java.util.Iterator<@{rel.name}@{ext}> _iter = @{rule.iterable}.iterator();
+	org.mandarax.rt.ResourceIterator<@{rel.name}@{ext}> _resIter = (_iter instanceof org.mandarax.rt.ResourceIterator)?(org.mandarax.rt.ResourceIterator<@{rel.name}@{ext}>)_iter:new org.mandarax.rt.NonClosableResourceIterator<@{rel.name}@{ext}>(_iter);  
+	
+	com.google.common.base.Predicate<@{rel.name}@{ext}> _filter = new com.google.common.base.Predicate<@{rel.name}@{ext}>() {
+		@Override 
+		public boolean apply(@{rel.name}@{ext} _obj) {
+			boolean _t = true;
+			@foreach{param:query.parameterNames}_t = _t && Equals.compare(@{param},_obj.@{param}); 
+			@end{}
+			return _t;
+		}
+	};
+	return new org.mandarax.rt.FilteredIterator(_resIter,_filter);
+	@else{}
+	// optimised code: invoke method @{method} 
+	java.util.Iterator<@{rel.name}@{ext}> _iter = @{rule.iterable}.@{method.name} (@foreach{param:query.parameterNames}@{param}@end{','});
+	org.mandarax.rt.ResourceIterator<@{rel.name}@{ext}> _resIter = (_iter instanceof org.mandarax.rt.ResourceIterator)?(org.mandarax.rt.ResourceIterator<@{rel.name}@{ext}>)_iter:new org.mandarax.rt.NonClosableResourceIterator<@{rel.name}@{ext}>(_iter);
+	return _resIter;
+	@end{}
+			
+		
+		
+	

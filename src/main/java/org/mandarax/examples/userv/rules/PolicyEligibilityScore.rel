@@ -1,0 +1,30 @@
+package org.mandarax.examples.userv.rules.generated;
+
+import org.mandarax.examples.userv.domain.*;
+ 
+@category="Eligibility Scoring Rule Set"
+@author="Jens Dietrich"
+@lastupdated="19/11/10"
+rel PolicyEligibilityScore(Car car,Driver driver,int score) queries getScore(car,driver),hasScore(car,driver,score) {
+	
+	@description="If car is Not Eligible then increase policy eligibility score by 100"
+	ES_01a: AutoEligibility(car,"not eligible") -> PolicyEligibilityScore(car,driver,100);
+
+	@description="If car is Provisional then increase policy eligibility score by 50"
+	ES_01b: AutoEligibility(car,"provisional") -> PolicyEligibilityScore(car,driver,50);
+
+	@description="If driver is Young Driver and is not an Eligible Driver then increase policy eligibility score by 30"
+	ES_02a: DriverCategory(driver,"young driver") & !IsEligible(driver) -> PolicyEligibilityScore(car,driver,30);
+
+	@description="If driver is Senior Driver and is not an Eligible Driver then increase policy eligibility score by 20"
+	ES_02b: DriverCategory(driver,"senior driver") & !IsEligible(driver) -> PolicyEligibilityScore(car,driver,20);
+
+	@description="If driver is High Risk Driver then increase policy eligibility score by 100"
+	ES_02c: IsHighRiskDriver(driver) -> PolicyEligibilityScore(car,driver,100);
+
+	@description="If client is Preferred then reduce policy eligibility score by 50"
+	ES_03a: client.isPreferred -> PolicyEligibilityScore(car,client,-50);
+
+	@description="If client is Elite then reduce policy eligibility score by 100"
+	ES_03b: client.isElite -> PolicyEligibilityScore(car,client,-100);
+}

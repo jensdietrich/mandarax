@@ -1,0 +1,18 @@
+package org.mandarax.examples.userv.rules.generated;
+
+import org.mandarax.examples.userv.domain.*;
+ 
+@category="Driver Eligibility Rule Set"
+@author="Jens Dietrich"
+@lastupdated="19/11/10"
+rel HasTrainingCertification(Driver driver) queries hasDertification(driver) {
+	
+	@description="If driver has taken driver's training from school then driver has training certification"
+	DE_DAC07: driver.hasDriversTrainingFromSchool -> HasTrainingCertification(driver);
+
+	@description="If driver has taken driver's training from a licensed driver training company, then driver has training certification"
+	DE_DAC08: driver.hasDriversTrainingFromLicensedDriverTrainingCompany -> HasTrainingCertification(driver);
+
+	@description="If driver had taken a senior citizen driver's refresher course, then driver has training certification"
+	DE_DAC09: driver.hasTakenASeniorCitizenDriversRefresherCourse -> HasTrainingCertification(driver);
+}

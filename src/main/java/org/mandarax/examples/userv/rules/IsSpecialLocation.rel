@@ -1,0 +1,18 @@
+package org.mandarax.examples.userv.rules.generated;
+
+import org.mandarax.examples.userv.domain.*;
+ 
+@category="Driver Premiums Rule Set"
+@author="Jens Dietrich"
+@lastupdated="19/11/10"
+rel IsSpecialLocation(Driver driver) queries isSpecialLocation(driver) {
+
+	@description="CA is special location"
+	DP_00a: driver.location=="CA" -> IsSpecialLocation(driver);
+
+	@description="NY is special location"
+	DP_00b: driver.location=="NY" -> IsSpecialLocation(driver);
+
+	@description="VA is special location"
+	DP_00c: driver.location=="VA" -> IsSpecialLocation(driver);
+}

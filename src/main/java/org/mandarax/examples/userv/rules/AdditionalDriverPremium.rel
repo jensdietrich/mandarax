@@ -1,0 +1,44 @@
+package org.mandarax.examples.userv.rules.generated;
+
+import org.mandarax.examples.userv.domain.*;
+ 
+@category="Driver Premiums Rule Set"
+@author="Jens Dietrich"
+@lastupdated="19/11/10"
+rel AdditionalDriverPremium(Driver driver,int premium) queries getPremium(driver),hasPremium(driver,premium) {
+
+	@description="If young driver and married and located in CA, NY or VA, then increase premium by $700"
+	DP_01: DriverCategory(driver,"young driver") & driver.isMarried & IsSpecialLocation(driver) -> AdditionalDriverPremium(driver,700);
+
+	@description="If young driver and single and located in CA, NY or VA, then increase premium by $720"
+	DP_02: DriverCategory(driver,"young driver") & !driver.isMarried & IsSpecialLocation(driver) -> AdditionalDriverPremium(driver,720);
+
+	@description="If young driver and married and not located in CA, NY or VA, then increase premium by $300"
+	DP_03: DriverCategory(driver,"young driver") & driver.isMarried & !IsSpecialLocation(driver) -> AdditionalDriverPremium(driver,300);
+
+	@description="If young driver and single and not located in CA, NY or VA, then increase premium by $300"
+	DP_04: DriverCategory(driver,"young driver") & !driver.isMarried & !IsSpecialLocation(driver) -> AdditionalDriverPremium(driver,300);
+
+	@description="If senior driver and located in CA, NY or VA, then increase premium by $500"
+	DP_05: DriverCategory(driver,"senior driver") & IsSpecialLocation(driver) -> AdditionalDriverPremium(driver,500);
+
+	@description="If senior driver and not located in CA, NY or VA, then increase premium by $200"
+	DP_06: DriverCategory(driver,"senior driver") & !IsSpecialLocation(driver) -> AdditionalDriverPremium(driver,200);
+
+
+	@description="If a High Risk Driver, then increase premium by $1,000"
+	DP_08: IsHighRiskDriver(driver) -> AdditionalDriverPremium(driver,1000);
+	
+	@description="Raise the premium by $ 150 per accident"
+	// remark1 - added prerequisite, otherwise there will be an additional driver premium of 0 for clients without accidents
+	DP_09: driver.numberOfAccidentsInvolvedIn>0 -> AdditionalDriverPremium(driver,150*driver.numberOfAccidentsInvolvedIn);
+
+	@category="Market Discounts Rule Set"
+	@description="If a preferred client, lower the premium by $250"
+	MSD_01: client.isPreferred -> AdditionalDriverPremium(client,-250);
+
+	@category="Market Discounts Rule Set"
+	@description="If an elite client, then lower the premium by $500"
+	MSD_02: client.isElite -> AdditionalDriverPremium(client,-500);
+
+}

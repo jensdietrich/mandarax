@@ -1,0 +1,21 @@
+package org.mandarax.examples.userv.rules.generated;
+
+import org.mandarax.examples.userv.domain.*;
+ 
+@category="Eligibility Scoring Rule Set"
+@author="Jens Dietrich"
+@lastupdated="19/11/10"
+rel InsuranceEligibility(Car car,Driver client,String eligibility) queries getEligibility(car,client),hasEligibility(car,client,eligibility) {
+	
+	@description="If eligibility score is less that 100, then client is eligible for insurance"
+	ES_04: (sum score in PolicyEligibilityScore(car,client,score)) <100 -> InsuranceEligibility(car,client,"eligible");
+
+	@description="If eligibility score is between 100 and 250 inclusive, then the client's application/policy renewal must be reviewed by underwriting manager who will determine whether the client is eligible for auto insurance"
+	ES_05: (sum score in PolicyEligibilityScore(car,client,score))>=100 & (sum score in PolicyEligibilityScore(car,client,score))<=250 -> InsuranceEligibility(car,client,"must be reviewed by underwriting manager");
+
+	@description="If eligibility score is greater than 250, the client is not eligible for auto insurance"
+	ES_06: (sum score in PolicyEligibilityScore(car,client,score))>250 -> InsuranceEligibility(car,client,"not eligible");
+
+	@description="If a long term client, the client is always eligible for auto insurance, as is every person and car directly covered by a long term client's auto policy"
+	ES_07: IsLongTermClient(client) -> InsuranceEligibility(car,client,"eligible");
+}

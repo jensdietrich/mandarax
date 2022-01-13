@@ -1,0 +1,14 @@
+	static double @{aggregationFunction} (ResourceIterator<@{aggregationRel}> _rel) {
+		double _v = 0 ;
+		int _c = 0;
+		
+		while (_rel.hasNext()) {
+			_v = _v + _rel.next().@{aggregationAttribute};
+			_c = _c + 1;
+		}
+		_rel.close();
+		return _c==0?0:(_v/_c);
+	}
+	
+	
+	

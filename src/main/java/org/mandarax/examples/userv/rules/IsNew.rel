@@ -1,0 +1,18 @@
+package org.mandarax.examples.userv.rules.generated;
+
+import org.mandarax.examples.userv.domain.*;
+ 
+int CurrentYear = 2010; // TODO instantiate dynamically using Calendar
+int NextYear = CurrentYear+1;
+
+@category="Auto Premiums Rule Set"
+@author="Jens Dietrich"
+@lastupdated="19/11/10"
+rel IsNew(Car car) queries isNew(car) {
+
+	@description="If the model year is the same as the current year, then new car"
+	AP_05: car.modelYear==CurrentYear -> IsNew(car);
+
+	@description="If the model year is the same as next year, then the car is new"
+	AP_06: car.modelYear==NextYear -> IsNew(car);
+}

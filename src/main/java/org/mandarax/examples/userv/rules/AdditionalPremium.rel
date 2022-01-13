@@ -1,0 +1,36 @@
+package org.mandarax.examples.userv.rules.generated;
+
+import org.mandarax.examples.userv.domain.*;
+ 
+int CurrentYear = 2001; //new GregorianCalendar().get(Calendar.YEAR); - not yet possible, see issue 16 TODO
+int NextYear = CurrentYear+1;
+
+@category="Auto Premiums Rule Set"
+@author="Jens Dietrich"
+@lastupdated="19/11/10"
+rel AdditionalPremium(Policy policy,Car car,int premium) queries getPremium(policy,car),hasPremium(policy,car,premium) {
+
+	@description="If car is new, then increase premium by $400"
+	AP_04: IsNew(car) -> AdditionalPremium(policy,car,400);
+
+	@description="If car is less than 5 years old, then increase premium by $300"
+	AP_07: car.age<5 & !IsNew(car) -> AdditionalPremium(policy,car,300);
+
+	@description="If car is between 5 and 10 years old, then increase premium by $250"
+	AP_08: car.age>=5 & car.age<=10 -> AdditionalPremium(policy,car,250);
+
+	@description="If uninsured motorist coverage is included, then increase premium by $300"
+	AP_09: policy.includesUninsuredMotoristCoverage -> AdditionalPremium(policy,car,300);
+
+	@description="If medical coverage is included, then increase premium by $600"
+	AP_10: policy.includesMedicalCoverage -> AdditionalPremium(policy,car,600);
+
+	@description="If Potential Occupant Injury is Extremely High, then increase premium by $1,000"
+	AP_11: PotentialOccupantInjuryRating(car,"extremely high") -> AdditionalPremium(policy,car,1000);
+
+	@description="If Potential Occupant Injury is High, then increase premium by $500"
+	AP_12: PotentialOccupantInjuryRating(car,"high") -> AdditionalPremium(policy,car,500);
+
+	@description="If Potential Theft is High, then increase premium by $500"
+	AP_13: PotentialTheftRating(car,"high") -> AdditionalPremium(policy,car,500);
+}

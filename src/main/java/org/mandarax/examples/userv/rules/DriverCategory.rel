@@ -1,0 +1,23 @@
+package org.mandarax.examples.userv.rules.generated;
+
+import org.mandarax.examples.userv.domain.*;
+ 
+@category="Driver Eligibility Rule Set"
+@author="Jens Dietrich"
+@lastupdated="19/11/10"
+rel DriverCategory(Driver driver,String category) queries getCategory(driver),hasCategory(driver,category) {
+	
+	@description="If the driver is male and is under the age of 25, then young driver"
+	DE_DAC01: driver.isMale & driver.age<25 -> DriverCategory(driver,"young driver");
+
+	@description="If the driver is female and is under the age of 20, then young driver"
+	DE_DAC02: !driver.isMale & driver.age<20 -> DriverCategory(driver,"young driver");
+	
+	@description="If the driver is over the age of 70, then senior driver"
+	DE_DAC04: driver.age>70 -> DriverCategory(driver,"senior driver");
+	
+	@category="Driver Premiums Rule Set"
+	@description="Driver is a Typical Driver is all of the following are true: Not a Young Driver,Not a Senior Driver"
+	DP_07: !DriverCategory(driver,"young driver") & !DriverCategory(driver,"senior driver") -> DriverCategory(driver,"typical driver");
+	
+}

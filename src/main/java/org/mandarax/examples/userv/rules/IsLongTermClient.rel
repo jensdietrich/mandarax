@@ -1,0 +1,12 @@
+package org.mandarax.examples.userv.rules.generated;
+
+import org.mandarax.examples.userv.domain.*;
+ 
+@category="Eligibility Scoring Rule Set"
+@author="Jens Dietrich"
+@lastupdated="19/11/10"
+rel IsLongTermClient(Driver client) queries isLongTermClient(client) {
+	
+	@description="A long term client has maintained a UServ portfolio for 15 years"
+	ES_08: client.numberOfYearsWithUServ>=15 -> IsLongTermClient(client);
+}

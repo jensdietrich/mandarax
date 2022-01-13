@@ -1,0 +1,25 @@
+package org.mandarax.examples.userv.rules.generated;
+
+import org.mandarax.examples.userv.domain.*;
+ 
+@category="Auto Eligibility Rule Set"
+@author="Jens Dietrich"
+@lastupdated="19/11/10"
+rel PotentialOccupantInjuryRating(Car car,String rating) queries getRating(car),hasRating(car,rating) {
+
+	@description="If the car has no airbags, then the car's potential occupant injury rating is extremely high"
+	AE_POIC01: !car.hasAirbags -> PotentialOccupantInjuryRating(car,"extremely high");
+
+	@description="If the car only has driver's air bag, then the car's potential occupant injury rating is high"
+	AE_POIC02: car.hasDriversAirbag & !car.hasFrontPassengerAirbag & !car.hasSidePanelAirbags -> PotentialOccupantInjuryRating(car,"high");
+
+	@description="If the car has driver's and front passenger air bags, then the car's potential occupant injury rating is moderate"
+	AE_POIC03: car.hasDriversAirbag & car.hasFrontPassengerAirbag & !car.hasSidePanelAirbags -> PotentialOccupantInjuryRating(car,"moderate");
+
+	@description="If the car has driver's front passenger and side panel air bags, then the car's potential occupant injury is low"
+	AE_POIC04: car.hasDriversAirbag & car.hasFrontPassengerAirbag & car.hasSidePanelAirbags -> PotentialOccupantInjuryRating(car,"low");
+
+	@description="If the car is a convertible and has no roll bar, then the potential occupant injury is extremely high"
+	AE_POIC05: car.isConvertible & !car.hasRollBar -> PotentialOccupantInjuryRating(car,"extremely high");
+
+}

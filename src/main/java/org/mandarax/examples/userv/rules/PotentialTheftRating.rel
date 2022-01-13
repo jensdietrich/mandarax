@@ -1,0 +1,26 @@
+package org.mandarax.examples.userv.rules.generated;
+
+import org.mandarax.examples.userv.domain.*;
+
+java.util.Collection highTheftProbabilityAutoList = null; 
+ 
+@category="Auto Eligibility Rule Set"
+@author="Jens Dietrich"
+@lastupdated="19/11/10"
+rel PotentialTheftRating(Car car,String rating) queries getRating(car),hasRating(car,rating) {
+	
+	@description="If the car is a convertible, then the car's potential theft rating is high"
+	AE_PTC01: car.convertible -> PotentialTheftRating(car,"high");
+	
+	@description="If the car's price is greater than $45,000, then the car's potential theft rating is high"
+	AE_PTC02: car.price>45000 -> PotentialTheftRating(car,"high");
+
+	@description="If the car model is on the list of 'High Theft Probability Auto', then the car's potential theft rating is high"
+	AE_PTC03: highTheftProbabilityAutoList.contains(car.type) -> PotentialTheftRating(car,"high");
+
+	@description="If all of the following are true, then the car's potential theft rating is moderate: car's price is between $20,000 and $45,000, car model is not on the list of 'High Theft Probability Auto'"
+	AE_PTC04: car.price>20000 & car.price<45000 & !highTheftProbabilityAutoList.contains(car.type) -> PotentialTheftRating(car,"moderate");
+
+	@description="If all of the following are true, then the car's potential theft rating is low: car's price is less that $20,000, car model is not on the list of 'High Theft Probability Auto'"
+	AE_PTC05: car.price<20000 & !highTheftProbabilityAutoList.contains(car.type) -> PotentialTheftRating(car,"low");
+}

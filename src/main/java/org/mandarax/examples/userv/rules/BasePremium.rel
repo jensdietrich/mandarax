@@ -1,0 +1,18 @@
+package org.mandarax.examples.userv.rules.generated;
+
+import org.mandarax.examples.userv.domain.*;
+ 
+@category="Auto Premiums Rule Set"
+@author="Jens Dietrich"
+@lastupdated="19/11/10"
+rel BasePremium(Car car,int premium) queries getPremium(car),hasPremium(car,premium) {
+	
+	@description="If compact car, then base premium is $250"
+	AP_01: car.isCompact -> BasePremium(car,250);
+
+	@description="If sedan, then base premium is $400"
+	AP_02: car.isSedan -> BasePremium(car,400);
+
+	@description="If luxury car, then base premium is $500"
+	AP_03: car.isLuxury -> BasePremium(car,500);
+}
